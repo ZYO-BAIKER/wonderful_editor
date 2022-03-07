@@ -27,19 +27,19 @@ gem "jbuilder", "~> 2.7"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.2", require: false
-gem 'devise_token_auth' #安全なトークンベースの認証
+gem "devise_token_auth" # 安全なトークンベースの認証
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
+  gem "factory_bot_rails" # テストに必要な gem
+  gem "faker" # テストに必要な gem
   gem "pry-byebug" # デバック
   gem "pry-doc" # デバック
   gem "pry-rails" # デバック
+  gem "rspec-rails" # テストに必要な gem
   gem "rubocop-rails" # rubocop
   gem "rubocop-rspec" # rubocop
-  gem "factory_bot_rails" # テストに必要な gem
-  gem "faker" # テストに必要な gem
-  gem "rspec-rails" # テストに必要な gem
 end
 
 group :development do
