@@ -36,6 +36,9 @@ group :development, :test do
   gem "pry-rails" # デバック
   gem "rubocop-rails" # rubocop
   gem "rubocop-rspec" # rubocop
+  gem "factory_bot_rails" # テストに必要な gem
+  gem "faker" # テストに必要な gem
+  gem "rspec-rails" # テストに必要な gem
 end
 
 group :development do
