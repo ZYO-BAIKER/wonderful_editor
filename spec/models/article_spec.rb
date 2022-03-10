@@ -20,16 +20,13 @@
 require "rails_helper"
 
 RSpec.describe Article, type: :model do
-
   context "必要な情報が揃っている場合" do
     let(:article) { build(:article) }
 
     it "記事が投稿できる" do
-      binding.pry
       expect(article).to be_valid
     end
   end
-
 
   context "bodyのみ入力している場合" do
     let(:article) { build(:article, title: nil) }
@@ -46,5 +43,4 @@ RSpec.describe Article, type: :model do
       expect(article).not_to be_valid
     end
   end
-
 end

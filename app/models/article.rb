@@ -22,5 +22,5 @@ class Article < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :article_likes, dependent: :destroy
 
-  validates :title, :body,  presence: true
+  validates :title, :body, presence: true
 end
