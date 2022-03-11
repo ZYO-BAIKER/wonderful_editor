@@ -27,6 +27,7 @@ gem "jbuilder", "~> 2.7"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.4.2", require: false
+gem 'active_model_serializers', '~> 0.10.0'  #  jsonを返す
 gem "devise_token_auth" # 安全なトークンベースの認証
 
 group :development, :test do
