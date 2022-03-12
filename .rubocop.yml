@@ -7,4 +7,7 @@ inherit_from:
   - config/rubocop/rspec.yml
 
 AllCops:
-  TargetRubyVersion: 2.7  
+  TargetRubyVersion: 2.7
+
+RSpec/MultipleExpectations:
+  Max: 20
