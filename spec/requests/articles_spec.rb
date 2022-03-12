@@ -41,7 +41,7 @@ RSpec.describe "Api::V1::Articles", type: :request do
     end
 
     context "指定したidのユーザーが存在しないとき" do
-      let(:article_id){ 14234 } # ③ article_id 14234 が呼ばれる。
+      let(:article_id) { 14234 } # ③ article_id 14234 が呼ばれる。
       it "ユーザーが見つからない" do
         expect { subject }.to raise_error ActiveRecord::RecordNotFound
       end

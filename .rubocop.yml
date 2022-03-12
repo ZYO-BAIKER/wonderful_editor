@@ -9,5 +9,8 @@ inherit_from:
 AllCops:
   TargetRubyVersion: 2.7
 
-RSpec/MultipleExpectations:
+RSpec/MultipleExpectations: # expectが多すぎて警告される対処
+  Max: 20
+
+RSpec/ExampleLength: # 行数が多すぎて警告される対処
   Max: 20
