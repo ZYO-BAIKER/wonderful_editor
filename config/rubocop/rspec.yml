@@ -19,8 +19,11 @@ RSpec/EmptyLineAfterFinalLet:
 # each で回したり aggregate_failures 使ってたりすると厳しい。
 # feature spec は exclude でも良いかもしれない。
 # ヒアドキュメント使うと一瞬で超えるので disable も検討。
-RSpec/ExampleLength:
-  Max: 8
+RSpec/ExampleLength: # 行数が多すぎて警告される対処
+  Enabled: false
+
+RSpec/MultipleExpectations: # expectが多すぎて警告される対処
+  Enabled: false
 
 # block の方がテスト対象が
 # * `{}` の前後のスペースと相まって目立つ
