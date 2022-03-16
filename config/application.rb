@@ -46,5 +46,6 @@ module WonderfulEditor
     end
 
     config.api_only = true
+    config.middleware.use ActionDispatch::Flash # 500 エラー対策(undefined method 'flash' for#<ActionDispatch::Request>)
   end
 end
