@@ -49,24 +49,22 @@ RSpec.describe "Api::V1::Articles", type: :request do
   end
 
   describe "POST /articles" do
-    subject { post(api_v1_articles_path, params:params) } # createを確認するためのテストと明確
+    subject { post(api_v1_articles_path, params: params) } # createを確認するためのテストと明確
 
     let(:params) { attributes_for(:article) }
     let(:current_user) { create(:user) }
 
     # stub
-    before { allow_any_instance_of(Api::V1::BaseApiController).to receive(:current_user).and_return(current_user) }
+    before { allow_any_instance_of(Api::V1::BaseApiController).to receive(:current_user).and_return(current_user) } # rubocop:disable Spec/AnyInstance
 
     context "適切なパラメータを送信したとき" do
       it "記事が１つ作成される" do
         expect { subject }.to change { Article.count }.by(1) # APIを叩いた前後で、Aricle.countが1増えることをチェック
         res = JSON.parse(response.body)
-        binding.pry
         expect(res["title"]).to eq params[:title]
         expect(res["body"]).to eq params[:body]
         expect(response.status).to eq 200
       end
     end
-
   end
 end

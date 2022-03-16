@@ -18,6 +18,7 @@ module Api::V1
     end
 
     private
+
       # Only allow a list of trusted parameters through.
       def article_params
         params.permit(:title, :body)
