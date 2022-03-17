@@ -59,7 +59,7 @@ RSpec.describe "Api::V1::Articles", type: :request do
 
     context "適切なパラメータを送信したとき" do
       it "記事が１つ作成される" do
-        expect { subject }.to change { Article.count }.by(1) # APIを叩いた前後で、Aricle.countが1増えることをチェック
+        expect { subject }.to change { Article.where(user_id: current_user.id).count }.by(1) # APIを叩いた前後で、Aricle.countが1増えることをチェック
         res = JSON.parse(response.body)
         expect(res["title"]).to eq params[:title]
         expect(res["body"]).to eq params[:body]
@@ -91,6 +91,33 @@ RSpec.describe "Api::V1::Articles", type: :request do
 
       it "記事を更新できない" do
         expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
+
+  describe "DELETE /articles/:id" do
+    subject { delete(api_v1_article_path(article.id))}
+    let(:current_user) { create(:user) }
+
+    # stub
+    before { allow_any_instance_of(Api::V1::BaseApiController).to receive(:current_user).and_return(current_user) } # rubocop:disable Spec/AnyInstance
+
+    context "自分の記事を削除しようとするとき" do
+      let!(:article) { create(:article, user: current_user) }
+
+      it "特定の記事のレコードを削除" do
+        expect { subject }.to change { Article.where(user_id: current_user.id).count }.by(-1)
+        expect(response).to have_http_status(:no_content)
+      end
+    end
+
+    context "他人の記事を削除しようとするとき" do
+      let(:other_user) { create(:user) }
+      let!(:article) { create(:article, user: other_user) }
+
+      it "削除できない" do
+        expect { subject }.to raise_error(ActiveRecord::RecordNotFound) &
+                              change { Article.count }.by(0)
       end
     end
   end
