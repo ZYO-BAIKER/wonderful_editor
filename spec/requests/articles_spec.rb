@@ -67,4 +67,31 @@ RSpec.describe "Api::V1::Articles", type: :request do
       end
     end
   end
+
+  describe "PATCH(PUT) /articles/:id" do
+    subject { patch(api_v1_article_path(article.id), params: params[:article]) }
+
+    let(:params) { { article: { title: Faker::Lorem.word } } }
+    let(:current_user) { create(:user) }
+
+    # stub
+    before { allow_any_instance_of(Api::V1::BaseApiController).to receive(:current_user).and_return(current_user) } # rubocop:disable Spec/AnyInstance
+
+    context "自分の記事のレコードを更新しようとするとき" do
+      let(:article) { create(:article, user: current_user) }
+      it "記事を更新できる" do
+        expect { subject }.to change { article.reload.title }.from(article.title).to(params[:article][:title])
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context "他人の記事のレコードを更新する場合" do
+      let(:other_user) { create(:user) }
+      let!(:article) { create(:article, user: other_user) }
+
+      it "記事を更新できない" do
+        expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+  end
 end

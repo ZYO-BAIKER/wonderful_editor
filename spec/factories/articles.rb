@@ -21,6 +21,6 @@ FactoryBot.define do
   factory :article do
     title { Faker::Lorem.word }
     body { Faker::Lorem.sentence }
-    user
+    association :user
   end
 end
