@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe "Api::V1::Auth::Sessions", type: :request do
   describe "POST /api/v1/auth/sign_in" do
     subject { post(api_v1_user_session_path, params: params) }
+
     let!(:user) { create(:user) }
 
     context "登録済のuser情報でログインする場合" do
@@ -56,6 +57,7 @@ RSpec.describe "Api::V1::Auth::Sessions", type: :request do
 
   describe "DELETE /api/v1/auth/sign_out" do
     subject { delete(destroy_api_v1_user_session_path, params: headers) }
+
     let(:user) { create(:user) }
 
     context "適切なパラメーターを送信したとき" do
