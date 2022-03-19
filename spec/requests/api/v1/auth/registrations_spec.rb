@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Api::V1::Auth::Registrations", type: :request do
-  describe "POST /v1/auth" do
+  describe "POST /api/v1/auth" do
     subject { post(api_v1_user_registration_path, params: params) }
 
     context "適切なパラメーターを送信したとき" do
