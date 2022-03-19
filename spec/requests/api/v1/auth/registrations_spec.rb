@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Api::V1::Auth::Registrations", type: :request do
   describe "POST /v1/auth" do
-    subject { post(api_v1_user_registration_path, params:params) }
+    subject { post(api_v1_user_registration_path, params: params) }
 
     context "適切なパラメーターを送信したとき" do
       let(:params) { attributes_for(:user) }
@@ -58,6 +58,5 @@ RSpec.describe "Api::V1::Auth::Registrations", type: :request do
         expect(res["errors"]["password"]).to include "can't be blank"
       end
     end
-
   end
 end
