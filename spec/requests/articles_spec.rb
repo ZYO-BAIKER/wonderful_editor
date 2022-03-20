@@ -57,7 +57,6 @@ RSpec.describe "Api::V1::Articles", type: :request do
 
     context "適切なパラメータを送信したとき" do
       it "記事が１つ作成される" do
-
         expect { subject }.to change { Article.where(user_id: current_user.id).count }.by(1) # APIを叩いた前後で、Aricle.countが1増えることをチェック
         res = JSON.parse(response.body)
         expect(res["title"]).to eq params[:article][:title]
@@ -117,6 +116,5 @@ RSpec.describe "Api::V1::Articles", type: :request do
                               change { Article.count }.by(0)
       end
     end
-    
   end
 end
