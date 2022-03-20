@@ -49,16 +49,15 @@ RSpec.describe "Api::V1::Articles", type: :request do
   end
 
   describe "POST /articles" do
-    subject { post(api_v1_articles_path, params: params) } # createを確認するためのテストと明確
+    subject { post(api_v1_articles_path, params: params, headers: headers) } # createを確認するためのテストと明確
 
     let(:params) { { article: attributes_for(:article) } }
     let(:current_user) { create(:user) }
-
-    # stub
-    before { allow_any_instance_of(Api::V1::BaseApiController).to receive(:current_user).and_return(current_user) } # rubocop:disable Spec/AnyInstance
+    let(:headers) { current_user.create_new_auth_token }
 
     context "適切なパラメータを送信したとき" do
       it "記事が１つ作成される" do
+
         expect { subject }.to change { Article.where(user_id: current_user.id).count }.by(1) # APIを叩いた前後で、Aricle.countが1増えることをチェック
         res = JSON.parse(response.body)
         expect(res["title"]).to eq params[:article][:title]
@@ -69,13 +68,11 @@ RSpec.describe "Api::V1::Articles", type: :request do
   end
 
   describe "PATCH(PUT) /articles/:id" do
-    subject { patch(api_v1_article_path(article.id), params: params) }
+    subject { patch(api_v1_article_path(article.id), params: params, headers: headers) }
 
     let(:params) { { article: attributes_for(:article) } }
     let(:current_user) { create(:user) }
-
-    # stub
-    before { allow_any_instance_of(Api::V1::BaseApiController).to receive(:current_user).and_return(current_user) } # rubocop:disable Spec/AnyInstance
+    let(:headers) { current_user.create_new_auth_token }
 
     context "自分の記事のレコードを更新しようとするとき" do
       let(:article) { create(:article, user: current_user) }
@@ -97,12 +94,10 @@ RSpec.describe "Api::V1::Articles", type: :request do
   end
 
   describe "DELETE /articles/:id" do
-    subject { delete(api_v1_article_path(article.id)) }
+    subject { delete(api_v1_article_path(article.id), headers: headers) }
 
     let(:current_user) { create(:user) }
-
-    # stub
-    before { allow_any_instance_of(Api::V1::BaseApiController).to receive(:current_user).and_return(current_user) } # rubocop:disable Spec/AnyInstance
+    let(:headers) { current_user.create_new_auth_token }
 
     context "自分の記事を削除しようとするとき" do
       let!(:article) { create(:article, user: current_user) }
@@ -122,5 +117,6 @@ RSpec.describe "Api::V1::Articles", type: :request do
                               change { Article.count }.by(0)
       end
     end
+    
   end
 end
