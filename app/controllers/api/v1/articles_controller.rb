@@ -33,7 +33,7 @@ module Api::V1
 
       # Only allow a list of trusted parameters through.
       def article_params
-        params.permit(:title, :body)
+        params.require(:article).permit(:title, :body)
       end
   end
 end

@@ -51,7 +51,7 @@ RSpec.describe "Api::V1::Articles", type: :request do
   describe "POST /articles" do
     subject { post(api_v1_articles_path, params: params) } # createを確認するためのテストと明確
 
-    let(:params) { attributes_for(:article) }
+    let(:params) { { article: attributes_for(:article) } }
     let(:current_user) { create(:user) }
 
     # stub
@@ -61,17 +61,17 @@ RSpec.describe "Api::V1::Articles", type: :request do
       it "記事が１つ作成される" do
         expect { subject }.to change { Article.where(user_id: current_user.id).count }.by(1) # APIを叩いた前後で、Aricle.countが1増えることをチェック
         res = JSON.parse(response.body)
-        expect(res["title"]).to eq params[:title]
-        expect(res["body"]).to eq params[:body]
+        expect(res["title"]).to eq params[:article][:title]
+        expect(res["body"]).to eq params[:article][:body]
         expect(response.status).to eq 200
       end
     end
   end
 
   describe "PATCH(PUT) /articles/:id" do
-    subject { patch(api_v1_article_path(article.id), params: params[:article]) }
+    subject { patch(api_v1_article_path(article.id), params: params) }
 
-    let(:params) { { article: { title: Faker::Lorem.word } } }
+    let(:params) { { article: attributes_for(:article) } }
     let(:current_user) { create(:user) }
 
     # stub
@@ -80,7 +80,8 @@ RSpec.describe "Api::V1::Articles", type: :request do
     context "自分の記事のレコードを更新しようとするとき" do
       let(:article) { create(:article, user: current_user) }
       it "記事を更新できる" do
-        expect { subject }.to change { article.reload.title }.from(article.title).to(params[:article][:title])
+        expect { subject }.to change { article.reload.title }.from(article.title).to(params[:article][:title]) &
+                              change { article.reload.body }.from(article.body).to(params[:article][:body])
         expect(response).to have_http_status(:ok)
       end
     end
