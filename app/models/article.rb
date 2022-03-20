@@ -3,8 +3,9 @@
 # Table name: articles
 #
 #  id         :bigint           not null, primary key
-#  body       :text
-#  title      :string
+#  body       :text             not null
+#  status     :string           default("draft"), not null
+#  title      :string           not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  user_id    :bigint           not null
@@ -23,4 +24,6 @@ class Article < ApplicationRecord
   has_many :article_likes, dependent: :destroy
 
   validates :title, :body, presence: true
+
+  enum status: { draft: "draft", published: "published" }
 end
