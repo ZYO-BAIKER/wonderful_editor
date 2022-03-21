@@ -21,27 +21,42 @@
 require "rails_helper"
 
 RSpec.describe Article, type: :model do
-  context "必要な情報が揃っている場合" do
-    let(:article) { build(:article) }
+  describe "正常系" do
+    context "必要な情報が揃っている場合" do
+      let(:article_draft) { build(:article, :draft) }
+      let(:article_published) { build(:article, :published) }
 
-    it "記事が投稿できる" do
-      expect(article).to be_valid
+      it "下書きが保存できる" do
+        expect(article_draft).to be_valid
+        expect(article_draft.status).to eq "draft"
+      end
+
+      it "記事が投稿できる(公開記事として保存される)" do
+        expect(article_published).to be_valid
+        expect(article_published.status).to eq "published"
+      end
+
     end
   end
 
-  context "bodyのみ入力している場合" do
-    let(:article) { build(:article, title: nil) }
+  describe "異常系" do
+    context "bodyのみ入力している場合" do
+      let(:article) { build(:article, title: nil) }
 
-    it "エラーが発生する" do
-      expect(article).not_to be_valid
+      it "エラーが発生する" do
+        expect(article).not_to be_valid
+        expect(article.status).to eq "draft"
+      end
+    end
+
+    context "title がない場合" do
+      let(:article) { build(:article, body: nil) }
+
+      it "エラーが発生する" do
+        expect(article).not_to be_valid
+        expect(article.status).to eq "draft"
+      end
     end
   end
 
-  context "title がない場合" do
-    let(:article) { build(:article, body: nil) }
-
-    it "エラーが発生する" do
-      expect(article).not_to be_valid
-    end
-  end
 end
