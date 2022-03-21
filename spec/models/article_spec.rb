@@ -35,7 +35,6 @@ RSpec.describe Article, type: :model do
         expect(article_published).to be_valid
         expect(article_published.status).to eq "published"
       end
-
     end
   end
 
@@ -58,5 +57,4 @@ RSpec.describe Article, type: :model do
       end
     end
   end
-
 end
