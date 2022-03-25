@@ -15,7 +15,19 @@
       <div v-html="compiledMarkdown(this.body)" class="preview">a</div>
     </div>
     <div class="create_btn_area">
-      <v-btn @click="createArticle" color="#3085DE" class="create_btn font-weight-bold white--text">記事を投稿</v-btn>
+      <v-btn
+        @click="postArticle('published')"
+        color="#3085DE"
+        class="font-weight-bold white--text"
+        >記事を投稿
+      </v-btn>
+      <v-btn
+        @click="postArticle('draft')"
+        color="#3085DE"
+        class="font-weight-bold"
+        outlined
+        >下書き投稿
+      </v-btn>
     </div>
   </form>
 </template>
@@ -37,6 +49,7 @@ const headers = {
 export default {
   data() {
     return {
+      id: "",
       title: "",
       body: "",
     }
@@ -72,22 +85,69 @@ export default {
   },
 
   methods: {
-    async createArticle() {
+    async postArticle(status) {
       const params = {
         title: this.title,
-        body: this.body
+        body: this.body,
+        status: status
       };
+
+      if (this.id) {
+        // update
+        await axios
+          .patch(`/api/v1/articles/${this.id}`, params, headers)
+          .then(_response => {
+            // TODO: 下書きの場合は下書き一覧ページに飛ばす
+            if (status == "published") {
+              Router.push("/");
+            } else {
+              Router.push("/articles/drafts");
+            }
+          })
+          .catch(e => {
+            // TODO: 適切な Error 表示
+            alert(e.response.data.errors);
+          });
+      } else {
+        // create
+        await axios
+          .post("/api/v1/articles", params, headers)
+          .then(_response => {
+            // TODO: 下書きの場合は下書き一覧ページに飛ばす
+            if (status == "published") {
+              Router.push("/");
+            } else {
+              Router.push("/articles/drafts");
+            }
+          })
+          .catch(e => {
+            // TODO: 適切な Error 表示
+            alert(e.response.data.errors);
+          });
+      }
+    },
+
+    async fetchArticle(id) {
       await axios
-        .post("/api/v1/articles", params, headers)
-        .then(_response => {
-          Router.push("/");
+        .get(`/api/v1/articles/${id}`)
+        .then(response => {
+          this.id = response.data.id;
+          this.title = response.data.title;
+          this.body = response.data.body;
         })
         .catch(e => {
           // TODO: 適切な Error 表示
-          alert(e.response.data.errors);
+          alert(e.response.statusText);
         });
     }
-  }
+  },
+
+  async mounted() {
+    if (this.$route.params.id) {
+      await this.fetchArticle(this.$route.params.id);
+    }
+  },
+
 }
 </script>
 
