@@ -16,7 +16,7 @@ RSpec.describe "Api::V1::Articles", type: :request do
       expect(res.length).to eq 3
       expect(res.map {|re| re["id"] }).to eq [article3.id, article1.id, article2.id]
       expect(res.first.keys).to eq ["id", "title", "updated_at", "user"]
-      expect(res.first["user"].keys).to eq ["id", "name", "updated_at"]
+      expect(res.first["user"].keys).to eq ["id", "name", "email", "updated_at"]
     end
   end
 
@@ -36,7 +36,7 @@ RSpec.describe "Api::V1::Articles", type: :request do
         expect(res["body"]).to eq article.body
         expect(res["updated_at"]).to be_present
         expect(res["user"]["id"]).to eq article.user.id
-        expect(res["user"].keys).to eq ["id", "name", "updated_at"]
+        expect(res["user"].keys).to eq ["id", "name", "email", "updated_at"]
       end
     end
 
