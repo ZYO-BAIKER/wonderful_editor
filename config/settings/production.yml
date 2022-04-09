@@ -1,2 +1,2 @@
 frontend:
-  url: "http://localhost:8080"
+  url: <%= ENV.fetch("FRONT_APP_URL") { "dummy_url" } %>
